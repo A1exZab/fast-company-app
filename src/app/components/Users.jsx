@@ -3,40 +3,47 @@ import { useState, useEffect } from 'react'
 import { UsersTable } from '.'
 import { UsersPagination } from '.'
 import { GroupList } from '.'
+import { SearchStatus } from '.'
 
 import Button from 'react-bootstrap/Button'
+import _ from 'lodash'
 
 import { paginate } from '../utils/paginate'
 import { dataConvert } from '../utils/dataConvert'
 
 import API from '../API'
 
-function App() {
+export function Users() {
 	const [users, setUsers] = useState()
-	const [professions, setProfessions] = useState()
-
-	const [currentPage, setCurrentPage] = useState(1)
-	const [selectedProf, setSelectedProf] = useState()
-
-	const pageSize = 4
-
-	const filteredUsers = selectedProf
-		? users.filter((user) => user.profession.name === selectedProf.name)
-		: users
-
-	const userCrop = filteredUsers && paginate(filteredUsers, currentPage, pageSize)
 
 	useEffect(() => {
 		API.users.fetchAll().then((data) => setUsers(dataConvert(data)))
 	}, [])
 
+	const [professions, setProfessions] = useState()
+
 	useEffect(() => {
 		API.professions.fetchAll().then((data) => setProfessions(dataConvert(data)))
 	}, [])
 
+	const [currentPage, setCurrentPage] = useState(1)
+	const [selectedProf, setSelectedProf] = useState()
+
 	useEffect(() => {
 		setCurrentPage(1)
 	}, [selectedProf])
+
+	const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
+
+	const pageSize = 8
+
+	const filteredUsers = selectedProf
+		? users.filter((user) => user.profession._id === selectedProf._id)
+		: users
+
+	const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order])
+
+	const userCrop = filteredUsers && paginate(sortedUsers, currentPage, pageSize)
 
 	const handleDeleteButton = (id) => {
 		setUsers(users.filter((user) => user._id !== id))
@@ -61,6 +68,10 @@ function App() {
 		setSelectedProf(undefined)
 	}
 
+	const handleSort = (item) => {
+		setSortBy(item)
+	}
+
 	return (
 		<div className='wrapper bg-dark'>
 			{users ? (
@@ -78,13 +89,16 @@ function App() {
 								</Button>
 							</div>
 						)}
-
-						<UsersTable
-							users={userCrop}
-							usersAmount={filteredUsers.length}
-							onClickBookmark={handleBookmark}
-							onClickDeleteButton={handleDeleteButton}
-						/>
+						<div className='d-flex gap-3 flex-grow-1 flex-column'>
+							<SearchStatus usersAmount={filteredUsers.length} />
+							<UsersTable
+								users={userCrop}
+								onClickBookmark={handleBookmark}
+								onClickDeleteButton={handleDeleteButton}
+								onSort={handleSort}
+								selectedSort={sortBy}
+							/>
+						</div>
 					</div>
 
 					<UsersPagination
@@ -100,5 +114,3 @@ function App() {
 		</div>
 	)
 }
-
-export default App
