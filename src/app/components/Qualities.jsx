@@ -17,5 +17,5 @@ export function Qualities({ qualities }) {
 }
 
 Qualities.propTypes = {
-	qualities: PropTypes.arrayOf(PropTypes.object).isRequired
+	qualities: PropTypes.array.isRequired
 }
