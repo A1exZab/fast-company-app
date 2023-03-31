@@ -4,6 +4,7 @@ import { UsersTable } from '.'
 import { UsersPagination } from '.'
 import { GroupList } from '.'
 import { SearchStatus } from '.'
+import { Loading } from '.'
 
 import Button from 'react-bootstrap/Button'
 import _ from 'lodash'
@@ -73,10 +74,10 @@ export function Users() {
 	}
 
 	return (
-		<div className='wrapper bg-dark'>
+		<>
 			{users ? (
-				<>
-					<div className='d-flex m-3 gap-3 flex-grow-1 align-items-start'>
+				<div className='d-flex h-100 flex-column '>
+					<div className='d-flex m-3 gap-3 flex-grow-1 '>
 						{professions && (
 							<div className='d-flex flex-column gap-2'>
 								<GroupList
@@ -100,17 +101,16 @@ export function Users() {
 							/>
 						</div>
 					</div>
-
 					<UsersPagination
 						itemsAmount={filteredUsers.length}
 						pageSize={pageSize}
 						currentPage={currentPage}
 						onPageChange={handlePageChange}
 					/>
-				</>
+				</div>
 			) : (
-				<div className='d-flex flex-grow-1'></div>
+				<Loading />
 			)}
-		</div>
+		</>
 	)
 }

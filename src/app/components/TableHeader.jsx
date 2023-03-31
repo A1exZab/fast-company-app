@@ -10,7 +10,6 @@ export function TableHeader({ onSort, selectedSort, columns }) {
 		}
 	}
 
-	console.log(selectedSort)
 	return (
 		<thead>
 			<tr>
