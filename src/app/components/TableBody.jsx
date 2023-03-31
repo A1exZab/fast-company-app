@@ -1,6 +1,7 @@
 import React from 'react'
 
 import _ from 'lodash'
+import { Link } from 'react-router-dom'
 
 import PropTypes from 'prop-types'
 
@@ -22,7 +23,13 @@ export function TableBody({ data, columns }) {
 				<tr key={item._id}>
 					{Object.keys(columns).map((column) => (
 						<td className={'text-center align-middle'} key={column}>
-							{renderContent(item, column)}
+							{columns[column].path === 'name' ? (
+								<Link to={`users/${item._id}`} className='text-decoration-none'>
+									{renderContent(item, column)}
+								</Link>
+							) : (
+								renderContent(item, column)
+							)}
 						</td>
 					))}
 				</tr>
