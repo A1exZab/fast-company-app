@@ -1,21 +1,20 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
 import API from '../API'
+import PropTypes from 'prop-types'
 
-import { Qualities, Loading } from '../components'
+import { Qualities, Loading } from '.'
 
-export function User() {
+export function UserPage({ userId }) {
 	const [user, setUser] = useState()
-
-	const { userId } = useParams()
-	const history = useHistory()
 
 	useEffect(() => {
 		API.users.getById(userId).then((data) => setUser(data))
 	}, [])
 
+	const history = useHistory()
 	return (
 		<>
 			{user ? (
@@ -41,4 +40,8 @@ export function User() {
 			)}
 		</>
 	)
+}
+
+UserPage.propTypes = {
+	userId: PropTypes.string.isRequired
 }

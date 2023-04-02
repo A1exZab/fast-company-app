@@ -4,12 +4,21 @@ import Button from 'react-bootstrap/Button'
 import { Bookmark } from '../components'
 import { Qualities } from '../components'
 import { CustomTable } from '../components'
+import { Link } from 'react-router-dom'
 
 import PropTypes from 'prop-types'
 
 export function UsersTable({ users, onClickBookmark, onClickDeleteButton, selectedSort, onSort }) {
 	const columns = {
-		name: { path: 'name', name: 'Имя' },
+		name: {
+			path: 'name',
+			name: 'Имя',
+			component: (user) => (
+				<Link className='text-decoration-none' to={`/users/${user._id}`}>
+					{user.name}
+				</Link>
+			)
+		},
 		qualities: { name: 'Качества', component: (user) => <Qualities qualities={user.qualities} /> },
 		professions: { path: 'profession.name', name: 'Профессия' },
 		completedMeetings: { path: 'completedMeetings', name: 'Встретился, раз' },

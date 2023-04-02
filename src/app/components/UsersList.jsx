@@ -14,7 +14,7 @@ import { dataConvert } from '../utils/dataConvert'
 
 import API from '../API'
 
-export function Users() {
+export function UsersList() {
 	const [users, setUsers] = useState()
 
 	useEffect(() => {

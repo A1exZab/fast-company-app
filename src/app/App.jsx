@@ -1,6 +1,5 @@
-import { Users, User, Navigation } from './components'
-import { Main } from './components/Main'
-import { Login } from './components/Login'
+import { Main, Login, Users } from './layouts'
+import { Navigation } from './components'
 import { NotFound } from './components/NotFound'
 
 import { Switch, Route } from 'react-router-dom'
@@ -13,8 +12,8 @@ function App() {
 				<Switch>
 					<Route exact path='/' component={Main} />
 					<Route path='/login' component={Login} />
-					<Route exact path='/users' component={Users} />
-					<Route path='/users/:userId?' component={User} />
+					{/* <Route exact path='/users' component={Users} /> */}
+					<Route path='/users/:userId?' component={Users} />
 					<Route component={NotFound} />
 				</Switch>
 			</div>
