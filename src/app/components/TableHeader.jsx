@@ -10,6 +10,17 @@ export function TableHeader({ onSort, selectedSort, columns }) {
 		}
 	}
 
+	const renderSortArrow = (selectedSort, currentPath) => {
+		if (selectedSort.path === currentPath) {
+			if (selectedSort.order === 'asc') {
+				return <i className='bi bi-caret-down-fill'></i>
+			} else {
+				return <i className='bi bi-caret-up-fill'></i>
+			}
+		}
+		return null
+	}
+
 	return (
 		<thead>
 			<tr>
@@ -20,17 +31,7 @@ export function TableHeader({ onSort, selectedSort, columns }) {
 						onClick={columns[column].path ? () => handleSort(columns[column].path) : undefined}
 						role={columns[column].path && 'button'}>
 						{columns[column].name}
-						{columns[column].path === selectedSort.path && (
-							<img
-								className=' ms-1'
-								src={
-									selectedSort.order === 'asc'
-										? '/img/caret-up-fill.svg'
-										: '/img/caret-down-fill.svg'
-								}
-								alt=''
-							/>
-						)}
+						{renderSortArrow(selectedSort, columns[column].path)}
 					</th>
 				))}
 			</tr>

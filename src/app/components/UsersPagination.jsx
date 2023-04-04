@@ -1,5 +1,4 @@
 import React from 'react'
-import Pagination from 'react-bootstrap/Pagination'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 
@@ -10,18 +9,21 @@ export function UsersPagination({ itemsAmount, pageSize, currentPage, onPageChan
 	const pages = _.range(1, pageCount + 1)
 
 	return (
-		<Pagination className='m-3 d-flex justify-content-center align-items-center'>
-			{pages.map((page) => {
-				return (
-					<Pagination.Item
-						key={'page_' + page}
-						active={page === currentPage}
-						onClick={() => onPageChange(page)}>
-						{page}
-					</Pagination.Item>
-				)
-			})}
-		</Pagination>
+		<nav>
+			<ul className='pagination m-3 d-flex justify-content-center align-items-center'>
+				{pages.map((page) => {
+					return (
+						<li
+							className={'page-item' + (page === currentPage ? ' active' : '')}
+							key={'page_' + page}>
+							<button className='page-link' onClick={() => onPageChange(page)}>
+								{page}
+							</button>
+						</li>
+					)
+				})}
+			</ul>
+		</nav>
 	)
 }
 

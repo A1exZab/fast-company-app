@@ -1,18 +1,12 @@
 import React from 'react'
-
-import added from '/img/bookmark-added.svg'
-import plus from '/img/bookmark-plus.svg'
-
 import PropTypes from 'prop-types'
 
 export function Bookmark({ onClickBookmark, id, status }) {
 	return (
-		<img
-			role='button'
+		<i
 			onClick={() => onClickBookmark(id)}
-			src={status ? added : plus}
-			alt='bookmark'
-		/>
+			className={'bi bi-bookmark' + (status ? '-star-fill' : '-plus')}
+			style={{ fontSize: '2rem', color: 'white', cursor: 'pointer' }}></i>
 	)
 }
 

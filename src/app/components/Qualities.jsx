@@ -1,5 +1,4 @@
 import React from 'react'
-import Badge from 'react-bootstrap/Badge'
 import PropTypes from 'prop-types'
 
 export function Qualities({ qualities }) {
@@ -7,9 +6,9 @@ export function Qualities({ qualities }) {
 		<div className='d-flex flex-wrap gap-2'>
 			{qualities.map((quality) => {
 				return (
-					<Badge key={quality._id} bg={quality.color}>
+					<span className={'badge text-light text-bg-' + quality.color} key={quality._id}>
 						{quality.name}
-					</Badge>
+					</span>
 				)
 			})}
 		</div>

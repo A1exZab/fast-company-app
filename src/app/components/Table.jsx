@@ -1,24 +1,22 @@
 import React from 'react'
-import Table from 'react-bootstrap/Table'
 import PropTypes from 'prop-types'
 
-import { TableHeader } from './TableHeader'
-import { TableBody } from './TableBody'
+import { TableHeader, TableBody } from '../components'
 
-export function CustomTable({ color, onSort, selectedSort, columns, data, children }) {
+export function Table({ color, onSort, selectedSort, columns, data, children }) {
 	return (
-		<Table variant={color}>
+		<table className={'table' + color}>
 			{children || (
 				<>
 					<TableHeader {...{ onSort, selectedSort, columns }} />
 					<TableBody {...{ data, columns }} />
 				</>
 			)}
-		</Table>
+		</table>
 	)
 }
 
-CustomTable.propTypes = {
+Table.propTypes = {
 	color: PropTypes.string,
 	onSort: PropTypes.func,
 	selectedSort: PropTypes.object,

@@ -1,9 +1,8 @@
 import React from 'react'
-import Button from 'react-bootstrap/Button'
 
 import { Bookmark } from '../components'
 import { Qualities } from '../components'
-import { CustomTable } from '../components'
+import { Table } from '../components'
 import { Link } from 'react-router-dom'
 
 import PropTypes from 'prop-types'
@@ -32,16 +31,16 @@ export function UsersTable({ users, onClickBookmark, onClickDeleteButton, select
 		},
 		delete: {
 			component: (user) => (
-				<Button onClick={() => onClickDeleteButton(user._id)} variant='danger'>
+				<button className='btn btn-danger' onClick={() => onClickDeleteButton(user._id)}>
 					Удалить
-				</Button>
+				</button>
 			)
 		}
 	}
 
 	return (
-		<CustomTable
-			color={'dark'}
+		<Table
+			color={'table-dark'}
 			onSort={onSort}
 			selectedSort={selectedSort}
 			columns={columns}

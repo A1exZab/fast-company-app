@@ -1,23 +1,22 @@
 import React from 'react'
-import ListGroup from 'react-bootstrap/ListGroup'
 import PropTypes from 'prop-types'
 
 export function GroupList({ items, valueProperty, contentProperty, selectedItem, onItemSelect }) {
 	return (
-		<ListGroup className=''>
+		<ul className='list-group'>
 			{items.map((item) => {
 				const active = item === selectedItem
 				return (
-					<ListGroup.Item
+					<li
+						className={'list-group-item' + (active ? ' active' : '')}
 						role='button'
-						active={active}
 						key={item[valueProperty]}
 						onClick={() => onItemSelect(item)}>
 						{item[contentProperty]}
-					</ListGroup.Item>
+					</li>
 				)
 			})}
-		</ListGroup>
+		</ul>
 	)
 }
 
