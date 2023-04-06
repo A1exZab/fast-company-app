@@ -3,8 +3,6 @@ import { useState, useEffect } from 'react'
 import { TextField } from '../components'
 import { validator } from '../utils/validator'
 
-import Button from 'react-bootstrap/Button'
-
 export function Login() {
 	const [data, setData] = useState({ email: '', password: '' })
 	const [errors, setErrors] = useState({})
@@ -71,9 +69,9 @@ export function Login() {
 							placeholder='Введите пароль'
 							error={errors.password}
 						/>
-						<Button className='w-100' disabled={!isValid}>
+						<button className='btn btn-primary w-100' disabled={!isValid}>
 							Отправить
-						</Button>
+						</button>
 					</form>
 				</div>
 			</div>

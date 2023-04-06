@@ -6,7 +6,9 @@ export function Qualities({ qualities }) {
 		<div className='d-flex flex-wrap gap-2'>
 			{qualities.map((quality) => {
 				return (
-					<span className={'badge text-light text-bg-' + quality.color} key={quality._id}>
+					<span
+						className={'badge border border-2 text-light' + ' border-' + quality.color}
+						key={quality._id}>
 						{quality.name}
 					</span>
 				)

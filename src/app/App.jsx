@@ -8,14 +8,13 @@ function App() {
 	return (
 		<div className='wrapper'>
 			<Nav />
-			<div className='content'>
-				<Switch>
-					<Route exact path='/' component={Main} />
-					<Route path='/login' component={Login} />
-					<Route path='/users/:userId?' component={Users} />
-					<Route component={NotFound} />
-				</Switch>
-			</div>
+
+			<Switch>
+				<Route exact path='/' component={Main} />
+				<Route path='/login' component={Login} />
+				<Route path='/users/:userId?' component={Users} />
+				<Route component={NotFound} />
+			</Switch>
 		</div>
 	)
 }

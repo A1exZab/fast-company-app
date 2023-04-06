@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 export function GroupList({ items, valueProperty, contentProperty, selectedItem, onItemSelect }) {
 	return (
-		<ul className='list-group'>
+		<ul className='list-group text-center'>
 			{items.map((item) => {
 				const active = item === selectedItem
 				return (

@@ -5,7 +5,7 @@ import { TableHeader, TableBody } from '../components'
 
 export function Table({ color, onSort, selectedSort, columns, data, children }) {
 	return (
-		<table className={'table' + color}>
+		<table className={'table ' + color}>
 			{children || (
 				<>
 					<TableHeader {...{ onSort, selectedSort, columns }} />

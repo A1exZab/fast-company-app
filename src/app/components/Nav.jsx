@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 
 export function Nav() {
 	return (
-		<nav className='navbar navbar-expand-lg bg-light  fw-semibold'>
-			<ul className='navbar-nav '>
-				<li className='nav-item '>
+		<nav className='navbar navbar-expand-lg bg-light  fw-semibold ps-3'>
+			<ul className='navbar-nav'>
+				<li className='nav-item'>
 					<Link className='nav-link ' to='/'>
 						Главная
 					</Link>

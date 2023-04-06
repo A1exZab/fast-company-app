@@ -10,7 +10,7 @@ export function UsersPagination({ itemsAmount, pageSize, currentPage, onPageChan
 
 	return (
 		<nav>
-			<ul className='pagination m-3 d-flex justify-content-center align-items-center'>
+			<ul className='pagination d-flex justify-content-center align-items-center m-0'>
 				{pages.map((page) => {
 					return (
 						<li
