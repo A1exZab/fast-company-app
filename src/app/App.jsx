@@ -1,13 +1,11 @@
-import { Main, Login, Users } from './layouts'
-import { Nav } from './components'
-import { NotFound } from './components/NotFound'
-
+import { Main, Login, Users, NotFound } from './layouts'
+import { NavBar } from './components/ui/NavBar'
 import { Switch, Route } from 'react-router-dom'
 
 function App() {
 	return (
 		<div className='wrapper'>
-			<Nav />
+			<NavBar />
 
 			<Switch>
 				<Route exact path='/' component={Main} />

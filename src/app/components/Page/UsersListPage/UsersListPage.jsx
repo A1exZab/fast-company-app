@@ -1,21 +1,20 @@
 import { useState, useEffect } from 'react'
 
-import { UsersTable } from '.'
-import { UsersPagination } from '.'
-import { GroupList } from '.'
-import { SearchStatus } from '.'
-import { Loading } from '.'
+import { Pagination } from '../../common/Pagination'
+import { GroupList } from '../../common/GroupList'
+import { Loading } from '../../common/Loading'
+import { UsersTable } from '../../ui/UsersTable'
+import { SearchStatus } from '../../ui/SearchStatus'
 
 import _ from 'lodash'
 
-import { paginate } from '../utils/paginate'
-import { dataConvert } from '../utils/dataConvert'
+import { paginate } from '../../../utils/paginate'
+import { dataConvert } from '../../../utils/dataConvert'
 
-import API from '../API'
+import API from '../../../API'
 
-export function UsersList() {
+export function UsersListPage() {
 	const [users, setUsers] = useState()
-	const [select, setSelect] = useState()
 	const [searchInput, setSearchInput] = useState('')
 
 	const handleInputChange = (e) => {
@@ -120,7 +119,7 @@ export function UsersList() {
 					/>
 				</div>
 
-				<UsersPagination
+				<Pagination
 					itemsAmount={filteredUsers.length}
 					pageSize={pageSize}
 					currentPage={currentPage}

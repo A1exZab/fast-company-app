@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { Bookmark } from '../components'
-import { Qualities } from '../components'
-import { Table } from '../components'
+import { Bookmark } from '../common/Bookmark'
+import { Qualities } from './Qualities'
 import { Link } from 'react-router-dom'
+import { Table } from '../common/Table'
 
 import PropTypes from 'prop-types'
 

@@ -1,10 +1,11 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import API from '../API'
+import API from '../../../API'
 import PropTypes from 'prop-types'
 
-import { Qualities, Loading } from '.'
+import { Qualities } from '../../ui/Qualities'
+import { Loading } from '../../common/Loading'
 
 export function UserPage({ userId }) {
 	const [user, setUser] = useState()
@@ -14,6 +15,7 @@ export function UserPage({ userId }) {
 	}, [])
 
 	const history = useHistory()
+
 	return (
 		<>
 			{user ? (

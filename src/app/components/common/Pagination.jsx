@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 
-export function UsersPagination({ itemsAmount, pageSize, currentPage, onPageChange }) {
+export function Pagination({ itemsAmount, pageSize, currentPage, onPageChange }) {
 	const pageCount = Math.ceil(itemsAmount / pageSize)
 	if (pageCount === 1) return null
 
@@ -27,7 +27,7 @@ export function UsersPagination({ itemsAmount, pageSize, currentPage, onPageChan
 	)
 }
 
-UsersPagination.propTypes = {
+Pagination.propTypes = {
 	itemsAmount: PropTypes.number.isRequired,
 	pageSize: PropTypes.number.isRequired,
 	currentPage: PropTypes.number.isRequired,

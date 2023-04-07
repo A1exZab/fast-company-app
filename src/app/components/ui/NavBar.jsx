@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export function Nav() {
+export function NavBar() {
 	return (
 		<nav className='navbar navbar-expand-lg bg-light  fw-semibold ps-3'>
 			<ul className='navbar-nav'>
