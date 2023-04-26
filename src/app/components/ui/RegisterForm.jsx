@@ -1,11 +1,30 @@
 import React, { useState, useEffect } from 'react'
 import { validator } from '../../utils/validator'
 import { TextField } from '../common/Form/TextField'
+import API from '../../API'
+import { dataConvert } from '../../utils/dataConvert'
+import { SelectField } from '../common/Form/SelectField'
+import { RadioField } from '../common/Form/RadioField'
+import { MultiSelectField } from '../common/Form/MultiSelectField'
 import { CheckBoxField } from '../common/Form/CheckBoxField'
 
-export function LoginForm() {
-	const [data, setData] = useState({ email: '', password: '', stayOn: false })
+export function RegisterForm() {
+	const [data, setData] = useState({
+		email: '',
+		password: '',
+		profession: '',
+		sex: 'male',
+		qualities: [],
+		license: false
+	})
 	const [errors, setErrors] = useState({})
+	const [professions, setProfessions] = useState()
+	const [qualities, setQualities] = useState({})
+
+	useEffect(() => {
+		API.professions.fetchAll().then((data) => setProfessions(data))
+		API.qualities.fetchAll().then((data) => setQualities(data))
+	}, [])
 
 	const handleChange = (target) => {
 		setData((prevState) => ({ ...prevState, [target.name]: target.value }))
@@ -28,6 +47,16 @@ export function LoginForm() {
 			isCapitalSymbol: { message: 'Пароль должен содержать хотя бы одну заглавную букву' },
 			isContainDigit: { message: 'Пароль должен содержать хотя бы одно число' },
 			min: { message: 'Пароль должен состоять минимум из 8 символов', value: 8 }
+		},
+		profession: {
+			isRequired: {
+				message: 'Выберите вашу профессию'
+			}
+		},
+		license: {
+			isRequired: {
+				message: 'Необходимо подтвердить лицензионное соглашение'
+			}
 		}
 	}
 
@@ -64,9 +93,42 @@ export function LoginForm() {
 				placeholder='Введите пароль'
 				error={errors.password}
 			/>
+			<SelectField
+				name='profession'
+				label='Выберите профессию'
+				value={data.profession}
+				onChange={handleChange}
+				defaultOption='Выбрать...'
+				options={professions && dataConvert(professions)}
+				error={errors.profession}
+			/>
+			<RadioField
+				label='Выберите ваш пол'
+				options={[
+					{ name: 'Мужской', value: 'male' },
+					{ name: 'Женский', value: 'female' }
+				]}
+				value={data.sex}
+				name='sex'
+				onChange={handleChange}
+			/>
 
-			<CheckBoxField value={data.stayOn} onChange={handleChange} name='stayOn'>
-				Оставаться в системе
+			<MultiSelectField
+				options={
+					qualities &&
+					dataConvert(qualities).map((quality) => ({ value: quality._id, label: quality.name }))
+				}
+				onChange={handleChange}
+				name='qualities'
+				label='Выберите ваши качества'
+			/>
+
+			<CheckBoxField
+				value={data.license}
+				onChange={handleChange}
+				name='license'
+				error={errors.license}>
+				Подтвердить <a>лицензионное соглашение</a>
 			</CheckBoxField>
 
 			<button className='btn btn-primary w-100' disabled={!isValid}>

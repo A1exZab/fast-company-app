@@ -10,6 +10,10 @@ export function TextField({ label, type, name, value, onChange, placeholder, err
 	const toggleShowPassword = () => {
 		setShowPassword((prevState) => !prevState)
 	}
+
+	const handleChange = ({ target }) => {
+		onChange({ name: target.name, value: target.value })
+	}
 	return (
 		<div className='mb-4'>
 			<label htmlFor={name}>{label}</label>
@@ -20,7 +24,7 @@ export function TextField({ label, type, name, value, onChange, placeholder, err
 					id={name}
 					name={name}
 					value={value}
-					onChange={onChange}
+					onChange={handleChange}
 					placeholder={placeholder}
 				/>
 				{type === 'password' && (
