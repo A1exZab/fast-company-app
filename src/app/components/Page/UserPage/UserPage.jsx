@@ -36,6 +36,12 @@ export function UserPage({ userId }) {
 						onClick={() => history.push('/users')}>
 						Все пользователи
 					</button>
+					<button
+						className='btn btn-danger'
+						style={{ width: '200px' }}
+						onClick={() => history.push(`/users/${userId}/edit`)}>
+						Редактировать
+					</button>
 				</div>
 			) : (
 				<div>

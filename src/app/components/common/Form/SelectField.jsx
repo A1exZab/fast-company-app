@@ -24,7 +24,12 @@ export function SelectField({ name, label, value, onChange, defaultOption, optio
 				<option disabled value=''>
 					{defaultOption}
 				</option>
-				{options && options.map((option) => <option key={option._id}>{option.name}</option>)}
+				{options &&
+					options.map((option) => (
+						<option value={option.value} key={option.value}>
+							{option.label}
+						</option>
+					))}
 			</select>
 			{error && <div className='invalid-feedback'>{error}</div>}
 		</div>
