@@ -18,7 +18,10 @@ export function UsersTable({ users, onClickBookmark, onClickDeleteButton, select
 				</Link>
 			)
 		},
-		qualities: { name: 'Качества', component: (user) => <Qualities qualities={user.qualities} /> },
+		qualities: {
+			name: 'Качества',
+			component: (user) => <Qualities qualities={user.qualities} backgroundColor='dark' />
+		},
 		professions: { path: 'profession.name', name: 'Профессия' },
 		completedMeetings: { path: 'completedMeetings', name: 'Встретился, раз' },
 		rate: { path: 'rate', name: 'Оценка' },

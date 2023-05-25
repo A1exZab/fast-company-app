@@ -42,9 +42,6 @@ export function Login() {
 									to={`/login/register`}>
 									Регистрация
 								</Link>
-								{/* <a className='text-decoration-underline' role='button' onClick={toggleFormType}>
-									Регистрация
-								</a> */}
 							</p>
 						</>
 					)}
