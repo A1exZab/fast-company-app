@@ -4,9 +4,9 @@ import { SelectField } from '../Form/SelectField'
 import { TextAreaField } from '../Form/TextAreaField'
 import { validator } from '../../../utils/validator'
 import PropTypes from 'prop-types'
-const initialData = { userId: '', content: '' }
 
 export function AddCommentForm({ onSubmit }) {
+	const initialData = { userId: '', content: '' }
 	const [data, setData] = useState(initialData)
 	const [users, setUsers] = useState({})
 	const [errors, setErrors] = useState({})
