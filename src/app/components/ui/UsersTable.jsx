@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import { Table } from '../common/Table'
 
 import PropTypes from 'prop-types'
+import { Profession } from './Profession'
 
 export function UsersTable({ users, onClickBookmark, onClickDeleteButton, selectedSort, onSort }) {
 	const columns = {
@@ -20,9 +21,9 @@ export function UsersTable({ users, onClickBookmark, onClickDeleteButton, select
 		},
 		qualities: {
 			name: 'Качества',
-			component: (user) => <Qualities qualities={user.qualities} backgroundColor='dark' />
+			component: (user) => <Qualities userQualities={user.qualities} backgroundColor='dark' />
 		},
-		professions: { path: 'profession.name', name: 'Профессия' },
+		professions: { name: 'Профессия', component: (user) => <Profession id={user.profession} /> },
 		completedMeetings: { path: 'completedMeetings', name: 'Встретился, раз' },
 		rate: { path: 'rate', name: 'Оценка' },
 		bookmark: {

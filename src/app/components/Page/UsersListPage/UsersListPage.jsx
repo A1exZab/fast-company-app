@@ -12,9 +12,11 @@ import { paginate } from '../../../utils/paginate'
 import { dataConvert } from '../../../utils/dataConvert'
 
 import API from '../../../API'
+import { useUsers } from '../../../hooks/useUsers'
 
 export function UsersListPage() {
-	const [users, setUsers] = useState()
+	// const [users, setUsers] = useState()
+	const { users } = useUsers()
 	const [searchInput, setSearchInput] = useState('')
 
 	const handleInputChange = (e) => {
@@ -22,10 +24,6 @@ export function UsersListPage() {
 		setSelectedProf(undefined)
 		setSearchInput(value)
 	}
-
-	useEffect(() => {
-		API.users.fetchAll().then((data) => setUsers(dataConvert(data)))
-	}, [])
 
 	const [professions, setProfessions] = useState()
 
@@ -55,14 +53,16 @@ export function UsersListPage() {
 	const userCrop = filteredUsers && paginate(sortedUsers, currentPage, pageSize)
 
 	const handleDeleteButton = (id) => {
-		setUsers(users.filter((user) => user._id !== id))
+		// setUsers(users.filter((user) => user._id !== id))
+		console.log('userId')
 	}
 
 	const handleBookmark = (id) => {
 		const updateUsers = users.map((user) => {
 			return user._id === id ? { ...user, bookmark: !user.bookmark } : user
 		})
-		setUsers(updateUsers)
+		// setUsers(updateUsers)
+		console.log(updateUsers)
 	}
 
 	const handlePageChange = (pageIndex) => {
