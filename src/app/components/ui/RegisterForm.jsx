@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { validator } from '../../utils/validator'
 import { TextField } from '../common/Form/TextField'
-import API from '../../API'
 import { dataConvert } from '../../utils/dataConvert'
+import { qualitiesTransform } from '../../utils/qualitiesTransform'
 import { SelectField } from '../common/Form/SelectField'
 import { RadioField } from '../common/Form/RadioField'
 import { MultiSelectField } from '../common/Form/MultiSelectField'
 import { CheckBoxField } from '../common/Form/CheckBoxField'
+import { useQualities } from '../../hooks/useQualities'
+import { useProfessions } from '../../hooks/useProfession'
+import { useAuth } from '../../hooks/useAuth'
+import { useHistory } from 'react-router-dom'
 
 export function RegisterForm() {
+	const history = useHistory()
 	const [data, setData] = useState({
 		email: '',
 		password: '',
@@ -17,24 +22,35 @@ export function RegisterForm() {
 		qualities: [],
 		license: false
 	})
-	const [errors, setErrors] = useState({})
-	const [professions, setProfessions] = useState()
-	const [qualities, setQualities] = useState({})
 
-	useEffect(() => {
-		API.professions.fetchAll().then((data) => setProfessions(data))
-		API.qualities.fetchAll().then((data) => setQualities(data))
-	}, [])
+	const { signUp } = useAuth()
+	const { qualities } = useQualities()
+	const { professions } = useProfessions()
+	const [errors, setErrors] = useState({})
+
+	const professionsList = dataConvert(professions).map((option) => ({
+		value: option._id,
+		label: option.name
+	}))
 
 	const handleChange = (target) => {
 		setData((prevState) => ({ ...prevState, [target.name]: target.value }))
 	}
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault()
 		const isValid = validate()
 		if (!isValid) return
-		console.log(data)
+		const newData = {
+			...data,
+			qualities: data.qualities.map((q) => q.value)
+		}
+		try {
+			await signUp(newData)
+			history.push('/')
+		} catch (error) {
+			setErrors(error)
+		}
 	}
 
 	const validatorConfig = {
@@ -99,7 +115,7 @@ export function RegisterForm() {
 				value={data.profession}
 				onChange={handleChange}
 				defaultOption='Выбрать...'
-				options={professions && dataConvert(professions)}
+				options={professionsList}
 				error={errors.profession}
 			/>
 			<RadioField
@@ -114,10 +130,7 @@ export function RegisterForm() {
 			/>
 
 			<MultiSelectField
-				options={
-					qualities &&
-					dataConvert(qualities).map((quality) => ({ value: quality._id, label: quality.name }))
-				}
+				options={qualitiesTransform(qualities)}
 				onChange={handleChange}
 				name='qualities'
 				label='Выберите ваши качества'

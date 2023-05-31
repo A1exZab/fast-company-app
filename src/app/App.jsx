@@ -3,23 +3,25 @@ import { NavBar } from './components/ui/NavBar'
 import { Switch, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { ProfessionProvider } from './hooks/useProfession'
-import { QualityProvider } from './hooks/useQuality'
+import { QualityProvider } from './hooks/useQualities'
+import { AuthProvider } from './hooks/useAuth'
 
 function App() {
 	return (
 		<div className='wrapper'>
-			<NavBar />
-
-			<Switch>
-				<Route path='/' exact component={Main} />
+			<AuthProvider>
+				<NavBar />
 				<QualityProvider>
 					<ProfessionProvider>
-						<Route path='/login/:type?' component={Login} />
-						<Route path='/users/:userId?/:edit?' component={Users} />
+						<Switch>
+							<Route path='/login/:type?' component={Login} />
+							<Route path='/users/:userId?/:edit?' component={Users} />
+							<Route path='/' exact component={Main} />
+							<Route component={NotFound} />
+						</Switch>
 					</ProfessionProvider>
 				</QualityProvider>
-				<Route component={NotFound} />
-			</Switch>
+			</AuthProvider>
 			<ToastContainer />
 		</div>
 	)
