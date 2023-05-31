@@ -6,6 +6,7 @@ import { TextField } from '../../common/Form/TextField'
 import { SelectField } from '../../common/Form/SelectField'
 import { RadioField } from '../../common/Form/RadioField'
 import { MultiSelectField } from '../../common/Form/MultiSelectField'
+import { BackButton } from '../../common/BackButton'
 import { Loading } from '../../common/Loading'
 
 import { validator } from '../../../utils/validator'
@@ -181,12 +182,7 @@ export function EditUserPage({ userId }) {
 								<button className='mb-3 btn btn-primary w-100' disabled={!isValid}>
 									Подтвердить
 								</button>
-								<button
-									role='button'
-									className='btn btn-secondary w-100'
-									onClick={() => history.push(`/users/${userId}`)}>
-									Назад
-								</button>
+								<BackButton />
 							</form>
 						</div>
 					</div>
