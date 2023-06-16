@@ -1,9 +1,9 @@
 import React from 'react'
-import { useQuality } from '../../hooks/useQuality'
+import { useQualities } from '../../hooks/useQualities'
 import { Loading } from '../common/Loading'
 import PropTypes from 'prop-types'
 export function Qualities({ userQualities, backgroundColor = 'light' }) {
-	const { isLoading, getQualities } = useQuality()
+	const { isLoading, getQualities } = useQualities()
 
 	return (
 		<>

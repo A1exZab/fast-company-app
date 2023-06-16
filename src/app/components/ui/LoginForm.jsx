@@ -2,32 +2,41 @@ import React, { useState, useEffect } from 'react'
 import { validator } from '../../utils/validator'
 import { TextField } from '../common/Form/TextField'
 import { CheckBoxField } from '../common/Form/CheckBoxField'
+import { useAuth } from '../../hooks/useAuth'
+import { useHistory } from 'react-router-dom'
 
 export function LoginForm() {
+	const history = useHistory()
 	const [data, setData] = useState({ email: '', password: '', stayOn: false })
 	const [errors, setErrors] = useState({})
+	const [enterError, setEnterError] = useState(null)
 
 	const handleChange = (target) => {
 		setData((prevState) => ({ ...prevState, [target.name]: target.value }))
+		setEnterError(null)
 	}
 
-	const handleSubmit = (e) => {
+	const { signIn } = useAuth()
+
+	const handleSubmit = async (e) => {
 		e.preventDefault()
 		const isValid = validate()
 		if (!isValid) return
-		console.log(data)
+
+		try {
+			await signIn(data)
+			history.push('/')
+		} catch (error) {
+			setEnterError(error.message)
+		}
 	}
 
 	const validatorConfig = {
 		email: {
-			isRequired: { message: 'Электронная почта обязательна для заполнения' },
-			isEmail: { message: 'Проверьте корректность введенных данных' }
+			isRequired: { message: 'Электронная почта обязательна для заполнения' }
 		},
 		password: {
-			isRequired: { message: 'Пароль обязателен для заполнения' },
-			isCapitalSymbol: { message: 'Пароль должен содержать хотя бы одну заглавную букву' },
-			isContainDigit: { message: 'Пароль должен содержать хотя бы одно число' },
-			min: { message: 'Пароль должен состоять минимум из 8 символов', value: 8 }
+			isRequired: { message: 'Пароль обязателен для заполнения' }
 		}
 	}
 
@@ -37,7 +46,6 @@ export function LoginForm() {
 
 	const validate = () => {
 		const errors = validator(data, validatorConfig)
-
 		setErrors(errors)
 
 		return Object.keys(errors).length === 0
@@ -68,8 +76,8 @@ export function LoginForm() {
 			<CheckBoxField value={data.stayOn} onChange={handleChange} name='stayOn'>
 				Оставаться в системе
 			</CheckBoxField>
-
-			<button className='btn btn-primary w-100' disabled={!isValid}>
+			{enterError && <p className='text-danger'>{enterError}</p>}
+			<button className='btn btn-primary w-100' disabled={!isValid || enterError}>
 				Отправить
 			</button>
 		</form>
