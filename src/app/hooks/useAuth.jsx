@@ -5,7 +5,12 @@ import userService from '../services/user.service'
 import { toast } from 'react-toastify'
 import { setTokens } from '../services/localStorage.service'
 
-const httpAuth = axios.create()
+const httpAuth = axios.create({
+	baseURL: 'https://identitytoolkit.googleapis.com/v1/',
+	params: {
+		key: import.meta.env.VITE_REACT_APP_FIREBASE_KEY
+	}
+})
 
 const AuthContext = React.createContext()
 
@@ -18,11 +23,12 @@ export function AuthProvider({ children }) {
 	const [error, setError] = useState(null)
 
 	async function signUp({ email, password, ...rest }) {
-		const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${
-			import.meta.env.VITE_REACT_APP_FIREBASE_KEY
-		}`
 		try {
-			const { data } = await httpAuth.post(url, { email, password, returnSecureToken: true })
+			const { data } = await httpAuth.post('accounts:signUp', {
+				email,
+				password,
+				returnSecureToken: true
+			})
 			setTokens(data)
 			await createUser({ _id: data.localId, ...rest })
 			console.log(data)
@@ -41,11 +47,12 @@ export function AuthProvider({ children }) {
 	}
 
 	async function signIn({ email, password }) {
-		const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${
-			import.meta.env.VITE_REACT_APP_FIREBASE_KEY
-		}`
 		try {
-			const { data } = await httpAuth.post(url, { email, password, returnSecureToken: true })
+			const { data } = await httpAuth.post('accounts:signInWithPassword', {
+				email,
+				password,
+				returnSecureToken: true
+			})
 			setTokens(data)
 			console.log(data)
 		} catch (error) {
@@ -54,17 +61,12 @@ export function AuthProvider({ children }) {
 			console.log(message)
 
 			if (code === 400) {
-				if (message === 'EMAIL_NOT_FOUND') {
-					const errorObject = {
-						email: 'Пользователь с таким Email не найден'
-					}
-					throw errorObject
-				}
-				if (message === 'INVALID_PASSWORD') {
-					const errorObject = {
-						password: 'Проверьте корректность введенного пароля'
-					}
-					throw errorObject
+				switch (message) {
+					case 'EMAIL_NOT_FOUND':
+					case 'INVALID_PASSWORD':
+						throw new Error('Email или пароль введены некорректно')
+					default:
+						throw new Error('Слишком много попыток входа, попробуйте позднее')
 				}
 			}
 		}
