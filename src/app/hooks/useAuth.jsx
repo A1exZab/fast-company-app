@@ -3,9 +3,11 @@ import PropTypes from 'prop-types'
 import axios from 'axios'
 import userService from '../services/user.service'
 import { toast } from 'react-toastify'
-import { setTokens } from '../services/localStorage.service'
+import localStorageService, { setTokens } from '../services/localStorage.service'
+import { Loading } from '../components/common/Loading'
+import { useHistory } from 'react-router-dom'
 
-const httpAuth = axios.create({
+export const httpAuth = axios.create({
 	baseURL: 'https://identitytoolkit.googleapis.com/v1/',
 	params: {
 		key: import.meta.env.VITE_REACT_APP_FIREBASE_KEY
@@ -19,8 +21,14 @@ export const useAuth = () => {
 }
 
 export function AuthProvider({ children }) {
-	const [currentUser, setUser] = useState({})
+	const [currentUser, setUser] = useState()
 	const [error, setError] = useState(null)
+	const [isLoading, setLoading] = useState(true)
+	const history = useHistory()
+
+	function getRandomInt(min, max) {
+		return Math.floor(Math.random() * (max - min + 1) + min)
+	}
 
 	async function signUp({ email, password, ...rest }) {
 		try {
@@ -30,8 +38,16 @@ export function AuthProvider({ children }) {
 				returnSecureToken: true
 			})
 			setTokens(data)
-			await createUser({ _id: data.localId, ...rest })
-			console.log(data)
+			await createUser({
+				email,
+				_id: data.localId,
+				rate: getRandomInt(1, 5),
+				completedMeetings: getRandomInt(0, 200),
+				image: `https://avatars.dicebear.com/api/avataaars/${(Math.random() + 1)
+					.toString(36)
+					.substring(7)}.svg`,
+				...rest
+			})
 		} catch (error) {
 			errorCatcher(error)
 			const { code, message } = error.response.data.error
@@ -54,7 +70,7 @@ export function AuthProvider({ children }) {
 				returnSecureToken: true
 			})
 			setTokens(data)
-			console.log(data)
+			await getUserData()
 		} catch (error) {
 			errorCatcher(error)
 			const { code, message } = error.response.data.error
@@ -72,9 +88,35 @@ export function AuthProvider({ children }) {
 		}
 	}
 
+	function logOut() {
+		localStorageService.removeAuthData()
+		setUser(null)
+		history.push('/')
+	}
+
 	async function createUser(data) {
 		try {
 			const { content } = await userService.create(data)
+			setUser(content)
+		} catch (error) {
+			errorCatcher(error)
+		}
+	}
+
+	async function getUserData() {
+		try {
+			const { content } = await userService.getCurrentUser()
+			setUser(content)
+		} catch (error) {
+			errorCatcher(error)
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	async function updateUserData(data) {
+		try {
+			const { content } = await userService.update(data)
 			setUser(content)
 		} catch (error) {
 			errorCatcher(error)
@@ -88,6 +130,14 @@ export function AuthProvider({ children }) {
 	}
 
 	useEffect(() => {
+		if (localStorageService.getAccessToken()) {
+			getUserData()
+		} else {
+			setLoading(false)
+		}
+	}, [])
+
+	useEffect(() => {
 		if (error !== null) {
 			toast.error(error)
 			setError(null)
@@ -95,7 +145,9 @@ export function AuthProvider({ children }) {
 	}, [error])
 
 	return (
-		<AuthContext.Provider value={{ signUp, signIn, currentUser }}>{children}</AuthContext.Provider>
+		<AuthContext.Provider value={{ signUp, signIn, currentUser, logOut, updateUserData }}>
+			{!isLoading ? children : <Loading />}
+		</AuthContext.Provider>
 	)
 }
 

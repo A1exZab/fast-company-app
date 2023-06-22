@@ -4,7 +4,6 @@ import { Loading } from '../common/Loading'
 import PropTypes from 'prop-types'
 export function Qualities({ userQualities, backgroundColor = 'light' }) {
 	const { isLoading, getQualities } = useQualities()
-
 	return (
 		<>
 			{!isLoading ? (

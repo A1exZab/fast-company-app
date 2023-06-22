@@ -9,7 +9,7 @@ export function QualitiesCard({ qualities }) {
 					<span>Качества</span>
 				</h5>
 				<div className='d-flex justify-content-center'>
-					<Qualities qualities={qualities} />
+					<Qualities userQualities={qualities} />
 				</div>
 			</div>
 		</div>

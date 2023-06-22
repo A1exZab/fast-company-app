@@ -9,15 +9,15 @@ import { SearchStatus } from '../../ui/SearchStatus'
 import _ from 'lodash'
 
 import { paginate } from '../../../utils/paginate'
-import { dataConvert } from '../../../utils/dataConvert'
 
-import API from '../../../API'
 import { useUsers } from '../../../hooks/useUsers'
+import { useProfessions } from '../../../hooks/useProfession'
+import { useAuth } from '../../../hooks/useAuth'
 
 export function UsersListPage() {
-	// const [users, setUsers] = useState()
 	const { users } = useUsers()
 	const [searchInput, setSearchInput] = useState('')
+	const { currentUser } = useAuth()
 
 	const handleInputChange = (e) => {
 		const { value } = e.target
@@ -25,11 +25,7 @@ export function UsersListPage() {
 		setSearchInput(value)
 	}
 
-	const [professions, setProfessions] = useState()
-
-	useEffect(() => {
-		API.professions.fetchAll().then((data) => setProfessions(dataConvert(data)))
-	}, [])
+	const { isLoading: professionsLoading, professions } = useProfessions()
 
 	const [currentPage, setCurrentPage] = useState(1)
 	const [selectedProf, setSelectedProf] = useState()
@@ -42,27 +38,27 @@ export function UsersListPage() {
 
 	const pageSize = 5
 
-	const filteredUsers = searchInput
-		? users.filter((user) => user.name.toLowerCase().includes(searchInput.toLowerCase()))
-		: selectedProf
-		? users.filter((user) => user.profession._id === selectedProf._id)
-		: users
+	function filterUsers(data) {
+		const filteredUsers = searchInput
+			? data.filter((user) => user.name.toLowerCase().includes(searchInput.toLowerCase()))
+			: selectedProf
+			? data.filter((user) => user.profession === selectedProf._id)
+			: data
+
+		return filteredUsers.filter((user) => user._id !== currentUser._id)
+	}
+
+	const filteredUsers = filterUsers(users)
 
 	const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order])
 
 	const userCrop = filteredUsers && paginate(sortedUsers, currentPage, pageSize)
-
-	const handleDeleteButton = (id) => {
-		// setUsers(users.filter((user) => user._id !== id))
-		console.log('userId')
-	}
 
 	const handleBookmark = (id) => {
 		const updateUsers = users.map((user) => {
 			return user._id === id ? { ...user, bookmark: !user.bookmark } : user
 		})
 		// setUsers(updateUsers)
-		console.log(updateUsers)
 	}
 
 	const handlePageChange = (pageIndex) => {
@@ -84,7 +80,7 @@ export function UsersListPage() {
 
 	return users ? (
 		<div className='d-flex h-100 m-3 gap-3 '>
-			{professions && (
+			{professions && !professionsLoading && (
 				<div className='d-flex flex-column gap-2'>
 					<GroupList
 						items={professions}
@@ -113,7 +109,6 @@ export function UsersListPage() {
 					<UsersTable
 						users={userCrop}
 						onClickBookmark={handleBookmark}
-						onClickDeleteButton={handleDeleteButton}
 						onSort={handleSort}
 						selectedSort={sortBy}
 					/>

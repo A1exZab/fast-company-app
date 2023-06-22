@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 import { Loading } from '../components/common/Loading'
 import userService from '../services/user.service'
+import { useAuth } from './useAuth'
 
 const UserContext = React.createContext()
 
@@ -12,6 +13,7 @@ export const useUsers = () => {
 
 export function UserProvider({ children }) {
 	const [users, setUsers] = useState([])
+	const { currentUser } = useAuth()
 	const [isLoading, setLoading] = useState(true)
 	const [error, setError] = useState(null)
 	useEffect(() => {
@@ -25,6 +27,15 @@ export function UserProvider({ children }) {
 		}
 	}, [error])
 
+	useEffect(() => {
+		if (!isLoading) {
+			const updatedUsers = [...users]
+			const updatedUserIndex = updatedUsers.findIndex((user) => user._id === currentUser._id)
+			updatedUsers[updatedUserIndex] = currentUser
+			setUsers(updatedUsers)
+		}
+	}, [currentUser])
+
 	async function getUsers() {
 		try {
 			const { content } = await userService.get()
@@ -35,13 +46,17 @@ export function UserProvider({ children }) {
 		}
 	}
 
+	function getUserById(userId) {
+		return users.find((user) => user._id === userId)
+	}
+
 	function errorCatcher(error) {
 		const { message } = error.response.data
 		toast.error(message)
 		setError(message)
 	}
 	return (
-		<UserContext.Provider value={{ users }}>
+		<UserContext.Provider value={{ users, getUserById }}>
 			{!isLoading ? children : <Loading />}
 		</UserContext.Provider>
 	)

@@ -15,6 +15,7 @@ import { useHistory } from 'react-router-dom'
 export function RegisterForm() {
 	const history = useHistory()
 	const [data, setData] = useState({
+		name: '',
 		email: '',
 		password: '',
 		profession: '',
@@ -58,6 +59,10 @@ export function RegisterForm() {
 			isRequired: { message: 'Электронная почта обязательна для заполнения' },
 			isEmail: { message: 'Проверьте корректность введенных данных' }
 		},
+		name: {
+			isRequired: { message: 'Имя обязательно для заполнения' },
+			min: { message: 'Имя должно состоять минимум из 3 символов', value: 3 }
+		},
 		password: {
 			isRequired: { message: 'Пароль обязателен для заполнения' },
 			isCapitalSymbol: { message: 'Пароль должен содержать хотя бы одну заглавную букву' },
@@ -93,12 +98,20 @@ export function RegisterForm() {
 	return (
 		<form className='' onSubmit={handleSubmit}>
 			<TextField
-				label='Электронаня почта'
+				label='Электронная почта'
 				name='email'
 				value={data.email}
 				onChange={handleChange}
 				placeholder='Введите email'
 				error={errors.email}
+			/>
+			<TextField
+				label='Имя'
+				name='name'
+				value={data.name}
+				onChange={handleChange}
+				placeholder='Введите имя'
+				error={errors.name}
 			/>
 			<TextField
 				label='Пароль'

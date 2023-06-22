@@ -5,8 +5,8 @@ import PropTypes from 'prop-types'
 
 export function Profession({ id }) {
 	const { isLoading, getProfession } = useProfessions()
-	const prof = getProfession(id)
-	return <>{!isLoading ? <p>{prof.name}</p> : <Loading />}</>
+	const profession = getProfession(id)
+	return <>{!isLoading ? <p className='text-secondary mb-1'>{profession.name}</p> : <Loading />}</>
 }
 
 Profession.propTypes = {

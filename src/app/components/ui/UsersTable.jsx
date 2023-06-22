@@ -8,7 +8,7 @@ import { Table } from '../common/Table'
 import PropTypes from 'prop-types'
 import { Profession } from './Profession'
 
-export function UsersTable({ users, onClickBookmark, onClickDeleteButton, selectedSort, onSort }) {
+export function UsersTable({ users, onClickBookmark, selectedSort, onSort }) {
 	const columns = {
 		name: {
 			path: 'name',
@@ -32,13 +32,6 @@ export function UsersTable({ users, onClickBookmark, onClickDeleteButton, select
 			component: (user) => (
 				<Bookmark status={user.bookmark} id={user._id} onClickBookmark={onClickBookmark} />
 			)
-		},
-		delete: {
-			component: (user) => (
-				<button className='btn btn-danger' onClick={() => onClickDeleteButton(user._id)}>
-					Удалить
-				</button>
-			)
 		}
 	}
 
@@ -56,6 +49,5 @@ export function UsersTable({ users, onClickBookmark, onClickDeleteButton, select
 UsersTable.propTypes = {
 	users: PropTypes.array.isRequired,
 	onSort: PropTypes.func,
-	selectedSort: PropTypes.object.isRequired,
-	onClickDeleteButton: PropTypes.func.isRequired
+	selectedSort: PropTypes.object.isRequired
 }
