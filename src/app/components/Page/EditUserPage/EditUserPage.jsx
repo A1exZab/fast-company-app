@@ -10,9 +10,11 @@ import { Loading } from '../../common/Loading'
 import { validator } from '../../../utils/validator'
 import { dataConvert } from '../../../utils/dataConvert'
 import { qualitiesTransform } from '../../../utils/qualitiesTransform'
-import { useProfessions } from '../../../hooks/useProfession'
-import { useQualities } from '../../../hooks/useQualities'
+
+import { useSelector } from 'react-redux'
+import { getQualities, getQualitiesLoadingStatus } from '../../../store/qualities'
 import { useAuth } from '../../../hooks/useAuth'
+import { getProfessions, getProfessionsLoadingStatus } from '../../../store/professions'
 
 export function EditUserPage() {
 	const history = useHistory()
@@ -21,17 +23,25 @@ export function EditUserPage() {
 	const [errors, setErrors] = useState({})
 	const { currentUser, updateUserData } = useAuth()
 
-	const { professions, isLoading: professionsLoading } = useProfessions()
-	const { qualities, isLoading: qualitiesLoading } = useQualities()
+	const qualities = useSelector(getQualities())
+	const qualitiesLoadingStatus = useSelector(getQualitiesLoadingStatus())
 
-	const professionsList = professions.map((prof) => ({
-		label: prof.name,
-		value: prof._id
-	}))
-	const qualitiesList = qualities.map((q) => ({
-		label: q.name,
-		value: q._id
-	}))
+	const professions = useSelector(getProfessions())
+	const professionsLoadingStatus = useSelector(getProfessionsLoadingStatus())
+
+	const professionsList = !professionsLoadingStatus
+		? professions.map((prof) => ({
+				label: prof.name,
+				value: prof._id
+		  }))
+		: []
+
+	const qualitiesList = !qualitiesLoadingStatus
+		? qualities.map((q) => ({
+				label: q.name,
+				value: q._id
+		  }))
+		: []
 
 	// const getUserProfession = (profId) => {
 	// 	for (const profession of professionsList) {
@@ -54,13 +64,13 @@ export function EditUserPage() {
 	}
 
 	useEffect(() => {
-		if (!professionsLoading && !qualitiesLoading && currentUser && !data) {
+		if (!professionsLoadingStatus && !qualitiesLoadingStatus && currentUser && !data) {
 			setData({
 				...currentUser,
 				qualities: getUserQualities(currentUser.qualities)
 			})
 		}
-	}, [professionsLoading, qualitiesLoading, currentUser, data])
+	}, [professionsLoadingStatus, qualitiesLoadingStatus, currentUser, data])
 
 	useEffect(() => {
 		if (data && isLoading) {

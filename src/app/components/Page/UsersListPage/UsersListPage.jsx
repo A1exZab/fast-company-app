@@ -11,8 +11,9 @@ import _ from 'lodash'
 import { paginate } from '../../../utils/paginate'
 
 import { useUsers } from '../../../hooks/useUsers'
-import { useProfessions } from '../../../hooks/useProfession'
 import { useAuth } from '../../../hooks/useAuth'
+import { useSelector } from 'react-redux'
+import { getProfessions, getProfessionsLoadingStatus } from '../../../store/professions'
 
 export function UsersListPage() {
 	const { users } = useUsers()
@@ -25,7 +26,8 @@ export function UsersListPage() {
 		setSearchInput(value)
 	}
 
-	const { isLoading: professionsLoading, professions } = useProfessions()
+	const professions = useSelector(getProfessions())
+	const professionsLoadingStatus = useSelector(getProfessionsLoadingStatus())
 
 	const [currentPage, setCurrentPage] = useState(1)
 	const [selectedProf, setSelectedProf] = useState()
@@ -80,7 +82,7 @@ export function UsersListPage() {
 
 	return users ? (
 		<div className='d-flex h-100 m-3 gap-3 '>
-			{professions && !professionsLoading && (
+			{!professionsLoadingStatus && (
 				<div className='d-flex flex-column gap-2'>
 					<GroupList
 						items={professions}

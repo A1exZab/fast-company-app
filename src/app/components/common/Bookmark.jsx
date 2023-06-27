@@ -10,8 +10,8 @@ export function Bookmark({ onClickBookmark, id, status }) {
 	)
 }
 
-Bookmark.propTypes = {
-	onClickBookmark: PropTypes.func.isRequired,
-	id: PropTypes.string.isRequired,
-	status: PropTypes.bool.isRequired
-}
+// Bookmark.propTypes = {
+// 	onClickBookmark: PropTypes.func.isRequired,
+// 	id: PropTypes.string.isRequired,
+// 	status: PropTypes.bool.isRequired
+// }

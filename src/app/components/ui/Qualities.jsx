@@ -1,14 +1,26 @@
-import React from 'react'
-import { useQualities } from '../../hooks/useQualities'
+import React, { useEffect } from 'react'
 import { Loading } from '../common/Loading'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+	getQualitiesByIds,
+	getQualitiesLoadingStatus,
+	loadQualitiesList
+} from '../../store/qualities'
 export function Qualities({ userQualities, backgroundColor = 'light' }) {
-	const { isLoading, getQualities } = useQualities()
+	const qualitiesList = useSelector(getQualitiesByIds(userQualities))
+	const isLoading = useSelector(getQualitiesLoadingStatus())
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		dispatch(loadQualitiesList())
+	}, [])
+
 	return (
 		<>
 			{!isLoading ? (
 				<div className='d-flex flex-wrap gap-2'>
-					{getQualities(userQualities).map((quality) => {
+					{qualitiesList.map((quality) => {
 						return (
 							<span
 								className={

@@ -7,10 +7,11 @@ import { SelectField } from '../common/Form/SelectField'
 import { RadioField } from '../common/Form/RadioField'
 import { MultiSelectField } from '../common/Form/MultiSelectField'
 import { CheckBoxField } from '../common/Form/CheckBoxField'
-import { useQualities } from '../../hooks/useQualities'
-import { useProfessions } from '../../hooks/useProfession'
 import { useAuth } from '../../hooks/useAuth'
 import { useHistory } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { getQualities, getQualitiesLoadingStatus } from '../../store/qualities'
+import { getProfessions, getProfessionsLoadingStatus } from '../../store/professions'
 
 export function RegisterForm() {
 	const history = useHistory()
@@ -25,14 +26,27 @@ export function RegisterForm() {
 	})
 
 	const { signUp } = useAuth()
-	const { qualities } = useQualities()
-	const { professions } = useProfessions()
+	const qualities = useSelector(getQualities())
+	const qualitiesLoadingStatus = useSelector(getQualitiesLoadingStatus())
+
+	const professions = useSelector(getProfessions())
+	const professionsLoadingStatus = useSelector(getProfessionsLoadingStatus())
 	const [errors, setErrors] = useState({})
 
-	const professionsList = dataConvert(professions).map((option) => ({
-		value: option._id,
-		label: option.name
-	}))
+	const professionsList = !professionsLoadingStatus
+		? dataConvert(professions).map((option) => ({
+				value: option._id,
+				label: option.name
+		  }))
+		: []
+
+	const qualitiesList = !qualitiesLoadingStatus
+		? dataConvert(qualities).map((item) => ({
+				label: item.name,
+				value: item._id,
+				color: item.color
+		  }))
+		: []
 
 	const handleChange = (target) => {
 		setData((prevState) => ({ ...prevState, [target.name]: target.value }))
@@ -143,7 +157,7 @@ export function RegisterForm() {
 			/>
 
 			<MultiSelectField
-				options={qualitiesTransform(qualities)}
+				options={qualitiesList}
 				onChange={handleChange}
 				name='qualities'
 				label='Выберите ваши качества'

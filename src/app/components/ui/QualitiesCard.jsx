@@ -1,6 +1,5 @@
 import React from 'react'
 import { Qualities } from './Qualities'
-
 export function QualitiesCard({ qualities }) {
 	return (
 		<div className='card mb-3'>
