@@ -2,9 +2,22 @@ import { orderBy } from 'lodash'
 import { AddCommentForm } from '../common/Comments/AddCommentForm'
 import { CommentsList } from '../common/Comments/CommentsList'
 import { useComments } from '../../hooks/useComments'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getcomments, getcommentsLoadingStatus, loadcommentsList } from '../../store/comments'
+import { Loading } from '../common/Loading'
+import { useParams } from 'react-router-dom'
 
 export function Comments() {
-	const { createComment, removeComment, comments } = useComments()
+	const { userId } = useParams()
+	const dispatch = useDispatch()
+	useEffect(() => {
+		dispatch(loadcommentsList(userId))
+	}, [userId])
+	const isLoading = useSelector(getcommentsLoadingStatus())
+	const { createComment, removeComment } = useComments()
+
+	const comments = useSelector(getcomments())
 
 	const handleSubmit = (data) => {
 		createComment(data)
@@ -27,7 +40,11 @@ export function Comments() {
 						<div className='card-body'>
 							<h2>Комментарии</h2>
 							<hr />
-							<CommentsList comments={sortedComments} onRemove={handleRemoveComment} />
+							{!isLoading ? (
+								<CommentsList comments={sortedComments} onRemove={handleRemoveComment} />
+							) : (
+								<Loading />
+							)}
 						</div>
 					</div>
 				)}
