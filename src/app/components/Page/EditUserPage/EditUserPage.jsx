@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+
 import { TextField } from '../../common/Form/TextField'
 import { SelectField } from '../../common/Form/SelectField'
 import { RadioField } from '../../common/Form/RadioField'
@@ -8,20 +8,18 @@ import { BackButton } from '../../common/BackButton'
 import { Loading } from '../../common/Loading'
 
 import { validator } from '../../../utils/validator'
-import { dataConvert } from '../../../utils/dataConvert'
-import { qualitiesTransform } from '../../../utils/qualitiesTransform'
-
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getQualities, getQualitiesLoadingStatus } from '../../../store/qualities'
-import { useAuth } from '../../../hooks/useAuth'
 import { getProfessions, getProfessionsLoadingStatus } from '../../../store/professions'
+import { getCurrentUserData, updateUserData } from '../../../store/users'
 
 export function EditUserPage() {
-	const history = useHistory()
+	const dispatch = useDispatch()
 	const [isLoading, setLoading] = useState(true)
 	const [data, setData] = useState()
 	const [errors, setErrors] = useState({})
-	const { currentUser, updateUserData } = useAuth()
+
+	const currentUser = useSelector(getCurrentUserData())
 
 	const qualities = useSelector(getQualities())
 	const qualitiesLoadingStatus = useSelector(getQualitiesLoadingStatus())
@@ -82,14 +80,12 @@ export function EditUserPage() {
 		setData((prevState) => ({ ...prevState, [target.name]: target.value }))
 	}
 
-	const handleSubmit = async (e) => {
+	const handleSubmit = (e) => {
 		e.preventDefault()
 		const isValid = validate()
 		if (!isValid) return
 
-		await updateUserData({ ...data, qualities: data.qualities.map((q) => q.value) })
-
-		history.push(`/users/${currentUser._id}`)
+		dispatch(updateUserData({ ...data, qualities: data.qualities.map((q) => q.value) }))
 	}
 
 	const validatorConfig = {

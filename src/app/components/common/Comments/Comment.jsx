@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types'
 import { displayDate } from '../../../utils/displayDate'
-import { useUsers } from '../../../hooks/useUsers'
-import { useAuth } from '../../../hooks/useAuth'
+import { getCurrentUserId, getUserById } from '../../../store/users'
+import { useSelector } from 'react-redux'
 export function Comment({ content, createdAt, _id: id, userId, onRemove }) {
-	const { getUserById } = useUsers()
-	const user = getUserById(userId)
-	const { currentUser } = useAuth()
+	const user = useSelector(getUserById(userId))
+	const currentUserId = useSelector(getCurrentUserId())
 
 	return (
 		<div className='bg-light card-body mb-3'>
@@ -19,7 +18,7 @@ export function Comment({ content, createdAt, _id: id, userId, onRemove }) {
 									<p className='mb-1'>
 										{user && user.name} <span className='small'>- {displayDate(createdAt)}</span>
 									</p>
-									{currentUser._id === userId && (
+									{currentUserId === userId && (
 										<button
 											className='btn-btn-sm text-danger d-flex align-items-center border-0 bg-transparent'
 											onClick={() => onRemove(id)}>

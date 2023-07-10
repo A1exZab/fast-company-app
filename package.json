@@ -12,6 +12,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.4.0",
     "bootstrap": "^5.2.3",
+    "history": "^4.9.0",
     "lodash": "^4.17.21",
     "nanoid": "^4.0.2",
     "npm": "^9.6.7",

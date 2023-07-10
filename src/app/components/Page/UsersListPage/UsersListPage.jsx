@@ -10,15 +10,14 @@ import _ from 'lodash'
 
 import { paginate } from '../../../utils/paginate'
 
-import { useUsers } from '../../../hooks/useUsers'
-import { useAuth } from '../../../hooks/useAuth'
 import { useSelector } from 'react-redux'
 import { getProfessions, getProfessionsLoadingStatus } from '../../../store/professions'
+import { getCurrentUserId, getUsersList } from '../../../store/users'
 
 export function UsersListPage() {
-	const { users } = useUsers()
+	const users = useSelector(getUsersList())
 	const [searchInput, setSearchInput] = useState('')
-	const { currentUser } = useAuth()
+	const currentUserId = useSelector(getCurrentUserId())
 
 	const handleInputChange = (e) => {
 		const { value } = e.target
@@ -47,7 +46,7 @@ export function UsersListPage() {
 			? data.filter((user) => user.profession === selectedProf._id)
 			: data
 
-		return filteredUsers.filter((user) => user._id !== currentUser._id)
+		return filteredUsers.filter((user) => user._id !== currentUserId._id)
 	}
 
 	const filteredUsers = filterUsers(users)

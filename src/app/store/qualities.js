@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSelector, createSlice } from '@reduxjs/toolkit'
 import qualityService from '../services/quality.service'
 
 const qualitiesSlice = createSlice({
@@ -51,6 +51,7 @@ export const loadQualitiesList = () => async (dispatch, getState) => {
 
 export const getQualities = () => (state) => state.qualities.entities
 export const getQualitiesLoadingStatus = () => (state) => state.qualities.isLoading
+
 export const getQualitiesByIds = (qualitiesIds) => (state) => {
 	if (state.qualities.entities) {
 		const qualitiesArray = []

@@ -7,11 +7,11 @@ import { Comments } from '../../ui/Comments'
 import PropTypes from 'prop-types'
 
 import { Loading } from '../../common/Loading'
-import { useUsers } from '../../../hooks/useUsers'
 import { CommentsProvider } from '../../../hooks/useComments'
+import { useSelector } from 'react-redux'
+import { getUserById } from '../../../store/users'
 export function UserPage({ userId }) {
-	const { getUserById } = useUsers()
-	const user = getUserById(userId)
+	const user = useSelector(getUserById(userId))
 
 	return (
 		<>
