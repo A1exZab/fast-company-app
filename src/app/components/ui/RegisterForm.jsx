@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { validator } from '../../utils/validator'
 import { TextField } from '../common/Form/TextField'
 import { dataConvert } from '../../utils/dataConvert'
-import { qualitiesTransform } from '../../utils/qualitiesTransform'
 import { SelectField } from '../common/Form/SelectField'
 import { RadioField } from '../common/Form/RadioField'
 import { MultiSelectField } from '../common/Form/MultiSelectField'
@@ -10,9 +9,10 @@ import { CheckBoxField } from '../common/Form/CheckBoxField'
 import { useDispatch, useSelector } from 'react-redux'
 import { getQualities, getQualitiesLoadingStatus } from '../../store/qualities'
 import { getProfessions, getProfessionsLoadingStatus } from '../../store/professions'
-import { signUp } from '../../store/users'
+import { getAuthError, signUp } from '../../store/users'
 
 export function RegisterForm() {
+	const registerError = useSelector(getAuthError())
 	const dispatch = useDispatch()
 	const [data, setData] = useState({
 		name: '',
@@ -163,6 +163,7 @@ export function RegisterForm() {
 				error={errors.license}>
 				Подтвердить <a>лицензионное соглашение</a>
 			</CheckBoxField>
+			{registerError && <p className='text-danger'>{registerError}</p>}
 
 			<button className='btn btn-primary w-100' disabled={!isValid}>
 				Отправить

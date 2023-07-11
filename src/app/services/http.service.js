@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import configFile from '../config.json'
-import { httpAuth } from '../hooks/useAuth'
 import localStorageService from './localStorage.service'
 import authService from './auth.service'
 
@@ -19,7 +18,7 @@ http.interceptors.request.use(
 			const refreshToken = localStorageService.getRefreshToken()
 
 			if (refreshToken && expiresDate < Date.now()) {
-				const { data } = await authService.refresh()
+				const data = await authService.refresh()
 
 				localStorageService.setTokens({
 					refreshToken: data.refresh_token,

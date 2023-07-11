@@ -12,11 +12,9 @@ export function LoginForm() {
 	const history = useHistory()
 	const [data, setData] = useState({ email: '', password: '', stayOn: false })
 	const [errors, setErrors] = useState({})
-	// const [enterError, setEnterError] = useState(null)
 
 	const handleChange = (target) => {
 		setData((prevState) => ({ ...prevState, [target.name]: target.value }))
-		// setEnterError(null)
 	}
 
 	const handleSubmit = (e) => {

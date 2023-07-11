@@ -5,6 +5,7 @@ import localStorageService from '../services/localStorage.service'
 import getRandomInt from '../utils/getRandomInt'
 import history from '../utils/history'
 import { generateAuthError } from '../utils/generateAuthError'
+import getAvatar from '../utils/getAvatar'
 
 const initialState = localStorageService.getAccessToken()
 	? {
@@ -95,6 +96,7 @@ export const signIn =
 		dispatch(authRequested())
 		try {
 			const data = await authService.login({ email, password })
+			console.log(data)
 			dispatch(authRequestSuccess({ userId: data.localId }))
 			localStorageService.setTokens(data)
 			history.push(redirect)
@@ -123,14 +125,19 @@ export const signUp =
 					email,
 					rate: getRandomInt(1, 5),
 					completedMeetings: getRandomInt(0, 200),
-					image: `https://avatars.dicebear.com/api/avataaars/${(Math.random() + 1)
-						.toString(36)
-						.substring(7)}.svg`,
+					image: getAvatar(),
 					...rest
 				})
 			)
 		} catch (error) {
 			dispatch(authRequestFailed(error.message))
+			const { code, message } = error.response.data.error
+			if (code === 400) {
+				const errorMessage = generateAuthError(message)
+				dispatch(authRequestFailed(errorMessage))
+			} else {
+				dispatch(authRequestFailed(error.message))
+			}
 		}
 	}
 
